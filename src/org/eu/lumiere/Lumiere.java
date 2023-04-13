@@ -2,11 +2,14 @@ package org.eu.lumiere;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.eu.lumiere.loggers.GlobalLogger;
 import org.eu.lumiere.loggers.GlobalLogger.LogLevel;
+import org.eu.lumiere.net.RequestListener;
 import org.eu.lumiere.net.ServerEvents;
-import org.eu.lumiere.net.WebServer;
 import org.eu.lumiere.net.http.HttpRequest;
 import org.eu.lumiere.net.http.HttpRequestHandler;
 import org.eu.lumiere.net.http.HttpResponse;
@@ -16,7 +19,7 @@ public class Lumiere implements ServerEvents{
 	private GlobalLogger l = GlobalLogger.getLogger();
 	
 	private int server_port = 8080;
-	private WebServer server;
+	private RequestListener server;
 	
 	private HttpResponse header;
 	private HttpRequestHandler request;
@@ -28,6 +31,7 @@ public class Lumiere implements ServerEvents{
 		}
 		header = new HttpResponse(null, "HTTP/1.1 200 OK", "text/html");
 		header.setProperty("Server", "Lumiere Server");
+		header.setProperty("Accept-Ranges", "bytes");
 	}
 
 	@Override
@@ -41,7 +45,13 @@ public class Lumiere implements ServerEvents{
 			httpH.setProperty(key, header.getProperty(key));
 		});
 		
+		// Add Date to the header
+		SimpleDateFormat gmtDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+        gmtDate.setTimeZone(TimeZone.getTimeZone("GMT"));
+        httpH.setProperty("Date", gmtDate.format(new Date()));
+		
 		request.onRequestReceived(new HttpRequest(socket), httpH);
+		
 		try {			
 			if(socket.isConnected())
 				socket.close();
@@ -57,7 +67,7 @@ public class Lumiere implements ServerEvents{
 		}
 		
 		server_port = port;
-		server = new WebServer(this.getClass().getSimpleName(), this, server_port);
+		server = new RequestListener(this.getClass().getSimpleName(), this, server_port);
 		server.start();
 	}
 	
