@@ -29,7 +29,7 @@ public class HttpResponse {
 		try {
 			StringBuilder build = new StringBuilder(status_line+"\r\n");
 			for(String key : getKeySet()) {
-				build.append(String.format("%s : %s\r\n", key, getProperty(key)));
+				build.append(String.format("%s: %s\r\n", key, getProperty(key)));
 			}
 			client.getOutputStream().write(build.append("\r\n").append(body).toString().getBytes());
 		} catch (IOException e) {
