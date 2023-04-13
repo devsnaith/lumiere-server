@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.TimeZone;
 
 import org.eu.lumiere.loggers.GlobalLogger;
@@ -13,6 +14,7 @@ import org.eu.lumiere.net.ServerEvents;
 import org.eu.lumiere.net.http.HttpRequest;
 import org.eu.lumiere.net.http.HttpRequestHandler;
 import org.eu.lumiere.net.http.HttpResponse;
+import org.eu.lumiere.utils.SimpleResponse;
 
 public class Lumiere implements ServerEvents{
 	
@@ -49,9 +51,14 @@ public class Lumiere implements ServerEvents{
 		SimpleDateFormat gmtDate = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
         gmtDate.setTimeZone(TimeZone.getTimeZone("GMT"));
         httpH.setProperty("Date", gmtDate.format(new Date()));
-		
-		request.onRequestReceived(new HttpRequest(socket), httpH);
-		
+        
+        try {
+			request.onRequestReceived(new HttpRequest(socket), httpH);
+        }catch (NoSuchElementException e) {
+        	httpH.setStatus("HTTP/1.1 400 Bad Request");
+        	new SimpleResponse("Bad Request", false).onRequestReceived(null, httpH);
+        }
+        	
 		try {			
 			if(socket.isConnected())
 				socket.close();
