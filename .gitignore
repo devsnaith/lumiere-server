@@ -1,5 +1,7 @@
 src/org/eu/lumiere/test/
 bin/org/eu/lumiere/test/
+*.class
+*.jar
 .settings/*
 .project
 .classpath
