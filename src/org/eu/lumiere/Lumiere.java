@@ -85,4 +85,11 @@ public class Lumiere implements ServerEvents{
 	public int getCurrentPort() {
 		return server_port;
 	}
+	
+	public static void main(String[] args) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Lumiere-server version 1.0").append("\n");
+		sb.append("lumiere-server at github https://github.com/DevSnaith/lumiere-server").append("\n");
+		System.out.write(sb.toString().getBytes());
+	}
 }
