@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.IllegalFormatException;
 
 public class GlobalLogger {
 	
@@ -22,7 +23,14 @@ public class GlobalLogger {
 		int index = -1;
 		String output = new String(pattern);
 		output = output.replaceAll("!CNAME", Thread.currentThread().getStackTrace()[2].getClassName());
-		output = output.replaceAll("!M", m);
+		
+		try {
+			output = output.replaceAll("!M", args == null || args.length <= 0 ? m : String.format(m, args));
+		}catch(IllegalFormatException ex) {			
+			printf(LogLevel.ERROR, ex.getMessage(), null);
+			output = output.replaceAll("!M", m);
+		}
+		
 		output = output.replaceAll("!L", (l == null ? LogLevel.INFO : l).toString());
 		while((index = output.indexOf("!D{")) != -1) {
 			String dPattern = output.substring(index);
