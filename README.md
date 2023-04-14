@@ -56,7 +56,7 @@ new Lumiere((HttpRequest request, HttpResponse response) -> {
 
 You can create multiple pages for your simple server using ``HttpController``
 
-#### Create responses using ``HttpController`` class
+#### Example using ``HttpController`` class
 ```java
 HttpController controller = new HttpController();
 controller.addHandler("/", new SimpleResponse("<a href=\"/info\">GO TO INFO</a>", true));
