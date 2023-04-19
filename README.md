@@ -28,9 +28,9 @@ lumiere-server at github https://github.com/DevSnaith/lumiere-server
 Now copy the ``lumiere-server.jar`` and add it to your project.
 
 ## Usage/Examples
-`Lumiere` class contains the basic things that must be available for the server to work well, it manages the traffic of requests and forwards them to the `HttpRequestHandler` interface. It also adds some properties in the header.
+`Lumiere` class contains the basic things that must be available for the server to work well, it manages the traffic of requests and forwards them to the `RequestHandler` interface. It also adds some properties in the header.
 
-You need to pass a `HttpRequestHandler` to `Lumiere`, The easiest way to do that is to use the `SimpleResponse` class that implements the `HttpRequestHandler` interface.
+You need to pass a `RequestHandler` to `Lumiere`, The easiest way to do that is to use the `SimpleResponse` class that implements the `RequestHandler` interface.
 
 #### Example using ``SimpleResponse`` class
 ```java
@@ -44,10 +44,10 @@ Lumiere server = new Lumiere(requestHandler);
 server.bootServer(server_port); // start the server
 ```
 
-If you want to make a dynamic response, use ``HttpRequestHandler``
-#### Example using ``HttpRequestHandler`` interface
+If you want to make a dynamic response, use ``RequestHandler``
+#### Example using ``RequestHandler`` interface
 ```java
-/* new HttpRequestHandler */
+/* new RequestHandler */
 new Lumiere((Socket socket, HttpRequest request, HttpResponse response) -> {
   response.setContentType("text/html");
   response.push("<b>"+request.getProperty("User-Agent")+"</b>");
