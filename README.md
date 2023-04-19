@@ -48,7 +48,7 @@ If you want to make a dynamic response, use ``HttpRequestHandler``
 #### Example using ``HttpRequestHandler`` interface
 ```java
 /* new HttpRequestHandler */
-new Lumiere((HttpRequest request, HttpResponse response) -> {
+new Lumiere((Socket socket, HttpRequest request, HttpResponse response) -> {
   response.setContentType("text/html");
   response.push("<b>"+request.getProperty("User-Agent")+"</b>");
 }).bootServer(8080);
@@ -61,7 +61,7 @@ You can create multiple pages for your simple server using ``HttpController``
 HttpController controller = new HttpController();
 controller.addHandler("/", new SimpleResponse("<a href=\"/info\">GO TO INFO</a>", true));
 controller.addHandler("/info", new SimpleResponse("Meow", false));
-controller.addHandler("/agent", (HttpRequest request, HttpResponse response) -> {
+controller.addHandler("/agent", (Socket socket, HttpRequest request, HttpResponse response) -> {
   response.setContentType("text/html");
   response.push("<b>"+request.getProperty("User-Agent")+"</b>");
 });
