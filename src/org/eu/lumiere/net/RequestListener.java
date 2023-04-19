@@ -17,7 +17,7 @@ public class RequestListener implements Runnable {
 	private int port = 8080;
 	private ServerSocket server;
 	private ServerEvents e;
-	
+		
 	public RequestListener(String name, ServerEvents e, int port) {
 		this.threadName = name == null ? this.threadName : name;
 		this.port = port;
@@ -32,14 +32,14 @@ public class RequestListener implements Runnable {
 		
 		try {
 			server = new ServerSocket(port);
+			thread = new Thread(this, threadName);
+			isRunning = true;
+			thread.start();
 		} catch (Exception ex) {
 			l.printf(LogLevel.ERROR, ex instanceof IllegalArgumentException ? 
 					"Server port must be between 0 and 65535" : ex.getMessage(), null);
 		}
 		
-		thread = new Thread(this, threadName);
-		isRunning = true;
-		thread.start();
 	}
 	
 	public synchronized void stop() {
@@ -65,22 +65,23 @@ public class RequestListener implements Runnable {
 	public void run() {
 		l.printf(LogLevel.INFO, threadName + " using port " + getPort(), null);
 		while(isRunning && !thread.isInterrupted()) {
-			try {
-				
-				if(server == null) {
-					stop();
-					continue;
-				}
-				
-				Socket s = server.accept();
-				if(e != null)
-					e.onConnection(s);
-//				l.printf(LogLevel.INFO, "New Connection " + s.getInetAddress().getHostAddress(), null);
-			} catch (IOException ex) {
-				l.printf(LogLevel.ERROR, ex.getMessage(), null);
-			}			
+			if(server != null) {
+				try {
+					Socket s = server.accept();
+					if(e != null)
+						e.onConnection(s);
+					} catch (IOException ex) {
+						l.printf(LogLevel.ERROR, ex.getMessage(), null);
+					}			
+				continue;
+			}
+			stop();
 		}
 		l.printf(LogLevel.INFO, threadName + " has been stopped", null);
+	}
+	
+	public boolean isRunning() {
+		return isRunning;
 	}
 	
 	public int getPort() {
