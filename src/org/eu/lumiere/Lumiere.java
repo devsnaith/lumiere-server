@@ -16,10 +16,8 @@ import org.eu.lumiere.loggers.GlobalLogger.LogLevel;
 import org.eu.lumiere.net.RequestHandler;
 import org.eu.lumiere.net.RequestListener;
 import org.eu.lumiere.net.ServerEvents;
-import org.eu.lumiere.net.http.HTTPController;
 import org.eu.lumiere.net.http.HTTPRequest;
 import org.eu.lumiere.net.http.HTTPResponse;
-import org.eu.lumiere.utils.SimpleResponse;
 
 public class Lumiere implements ServerEvents {
 	
