@@ -1,5 +1,6 @@
 src/org/eu/lumiere/test/
 bin/org/eu/lumiere/test/
+testdir/
 *.class
 *.jar
 .settings/*
