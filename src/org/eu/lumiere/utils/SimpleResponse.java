@@ -1,10 +1,12 @@
 package org.eu.lumiere.utils;
 
-import org.eu.lumiere.net.http.HttpRequest;
-import org.eu.lumiere.net.http.HttpRequestHandler;
-import org.eu.lumiere.net.http.HttpResponse;
+import java.net.Socket;
 
-public class SimpleResponse implements HttpRequestHandler {
+import org.eu.lumiere.net.RequestHandler;
+import org.eu.lumiere.net.http.HTTPRequest;
+import org.eu.lumiere.net.http.HTTPResponse;
+
+public class SimpleResponse implements RequestHandler {
 	
 	private String body = "BasicResponse is running";
 	private boolean html_response = false;
@@ -15,7 +17,7 @@ public class SimpleResponse implements HttpRequestHandler {
 	}
 	
 	@Override
-	public void onRequestReceived(HttpRequest request, HttpResponse response) {
+	public void onRequestReceived(Socket socket, HTTPRequest request, HTTPResponse response) {
 		response.setContentType(String.format("text/%s", html_response ? "html" : "plan"));
 		response.push(body);
 	}	
