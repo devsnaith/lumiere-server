@@ -38,9 +38,9 @@ int server_port = 8080;
 String body = "<b>Hello, World!</b>";
 boolean contentTypeIsHTML = true; // false = text/plan
 
-SimpleResponse requestHandler = new SimpleResponse(body, contentTypeIsHTML);
+SimpleResponse response = new SimpleResponse(body, contentTypeIsHTML);
 
-Lumiere server = new Lumiere(requestHandler);
+Lumiere server = new Lumiere(response);
 server.bootServer(server_port); // start the server
 ```
 
